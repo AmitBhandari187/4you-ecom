@@ -1,6 +1,8 @@
 package com.eccomerce.project.service;
 
 import com.eccomerce.project.model.Category;
+import com.eccomerce.project.repositories.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -8,39 +10,44 @@ import java.util.List;
 
 @Service
 public class CategoryServiceImpl implements CategoryService{
-    private List<Category> categories=new ArrayList<>();
+//    private List<Category> categories=new ArrayList<>();
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public List<Category> getAllCategories() {
-        return categories;
+        return categoryRepository.findAll();
     }
 
     @Override
     public void createCategory(Category category) {
-        categories.add(category);
+        categoryRepository.save(category);
     }
 
     @Override
     public void deleteCategory(Long categoryId) {
-        Category category=categories.stream()
-                .filter(c->c.getCategoryId().equals(categoryId))
-                .findFirst()
-                .orElseThrow(()->
-                        new RuntimeException("Category not found"));
-        categories.remove(category);
-    }
 
-    @Override
-    public Category updateCategory(Category category, Long categoryId) {
-        Category savedCategory = categories.stream()
+        List<Category> categories = categoryRepository.findAll();
+
+        Category category = categories.stream()
                 .filter(c -> c.getCategoryId().equals(categoryId))
                 .findFirst()
                 .orElseThrow(() ->
                         new RuntimeException("Category not found"));
 
+        categoryRepository.delete(category);
+    }
+
+    @Override
+    public Category updateCategory(Category category, Long categoryId) {
+
+        Category savedCategory = categoryRepository.findById(categoryId)
+                .orElseThrow(() ->
+                        new RuntimeException("Category not found"));
+
         savedCategory.setCategoryName(category.getCategoryName());
 
-        return savedCategory;
-
+        return categoryRepository.save(savedCategory);
     }
 }

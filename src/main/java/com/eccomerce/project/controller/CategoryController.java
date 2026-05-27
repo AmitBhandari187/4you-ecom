@@ -17,7 +17,6 @@ public class CategoryController {
     public CategoryController(CategoryService categoryService){
         this.categoryService=categoryService;
     }
-    private Long nextId=1L;
 
 
     @GetMapping("/public/categories")
@@ -32,7 +31,6 @@ public class CategoryController {
     @PostMapping("/public/categories")
     public ResponseEntity<Category> createCategory(@RequestBody Category category){
 
-        category.setCategoryId(nextId++);
         categoryService.createCategory(category);
 
         return ResponseEntity.status(201)

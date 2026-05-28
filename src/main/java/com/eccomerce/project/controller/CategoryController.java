@@ -2,6 +2,7 @@ package com.eccomerce.project.controller;
 
 import com.eccomerce.project.model.Category;
 import com.eccomerce.project.service.CategoryService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -29,7 +30,7 @@ public class CategoryController {
 
 
     @PostMapping("/public/categories")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category){
+    public ResponseEntity<Category> createCategory(@Valid @RequestBody Category category){
 
         categoryService.createCategory(category);
 
